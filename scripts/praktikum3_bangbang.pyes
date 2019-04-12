@@ -4,6 +4,7 @@ from geometry_msgs.msg import Twist
 import time
 from robotont_sensors.msg import LaserScanSplit
 
+
 velocity_publisher = rospy.Publisher(
     '/robotont/cmd_vel', Twist, queue_size=10)
 vel_msg = Twist()
@@ -47,36 +48,18 @@ def move():
         ########################
         # YOUR CODE HERE START #
         ########################
-        if distances.centerMin > 0.6:
-           vel_msg.linear.x = 0.2
-           vel_msg.linear.y = 0
-           vel_msg.angular.z = 0
-           velocity_publisher.publish(vel_msg)
-           time.sleep(0.1)
-        
-        elif (distances.leftMin <  distances.rightMin):
-             vel_msg.linear.x = 0
-             vel_msg.linear.y = 0
-             vel_msg.angular.z = -0.6
-             velocity_publisher.publish(vel_msg)
-             time.sleep(0.1)
-        elif (distances.rightMin < distances.leftMin):
-             vel_msg.linear.x = 0
-             vel_msg.linear.y = 0
-             vel_msg.angular.z = 0.6
-             velocity_publisher.publish(vel_msg)
-             time.sleep(0.1)
+        if distances.centerMin < 0.3:
+          driverBackwards()
         else:
-           vel_msg.linear.x = -0.2
-           vel_msg.linear.y = 0
-           vel_msg.angular.z = 0
-           velocity_publisher.publish(vel_msg)
-           time.sleep(0.1)
+          stopRobot()
+        vel_msg.linear.x = 0
+        vel_msg.linear.y = 0
+        vel_msg.angular.z = 0
+        velocity_publisher.publish(vel_msg)
+        time.sleep(0.1)
         ######################
         # YOUR CODE HERE END #
         ######################
-        velocity_publisher.publish(vel_msg)
-        rospy.sleep(0.05)
 
 
 if __name__ == '__main__':
